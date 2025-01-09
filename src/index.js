@@ -165,17 +165,40 @@ let example = JSON.stringify(mj)
 
 localStorage.setItem('variable', example)
 
-if (localStorage.getItem('variable')){
-    console.log(JSON.parse(localStorage.getItem('variable')));
-}
-else{
-    console.log("key not found");
+//example making a icon openable
+var icon1 = document.getElementById("draggable1");
+icon1.addEventListener('dblclick', makeWindow);
+
+function makeWindow(){
+    let pane = document.createElement("div")
+    let contentPane = document.getElementById("contentHolder");
+    pane.classList.add("windowPane")
+    pane.id="windowPane"
+    pane.draggable="false"
+    pane.innerHTML = `  <div class="windowTop" id="windowTop">
+                            Title of window, buttons, etc.
+                        </div>
+                        <div class="windowBottom">
+                            Window content
+                        </div>`
+    contentPane.appendChild(pane);
+    document.getElementById("windowTop").addEventListener('mousedown', dragPane);
+    
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// if (localStorage.getItem('variable')){
+//     console.log(JSON.parse(localStorage.getItem('variable')));
+// }
+// else{
+//     console.log("key not found");
+// }
+
+
+/* WIndow Movement */
+// document.addEventListener('DOMContentLoaded', () => {
     
-    document.getElementById("windowTop").addEventListener('mousedown', dragPane);
-});
+//     document.getElementById("windowTop").addEventListener('mousedown', dragPane);
+// });
 
 
 /// ADDING A DRAGGABLE WINDOW:
