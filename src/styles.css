@@ -1,0 +1,123 @@
+@font-face {
+    font-family: 'San Francisco';
+    src: url('./assets/SF-Pro-Display-Regular.otf');
+}
+@font-face {
+    font-family: 'San Francisco Mono';
+    src: url('./assets/SF-Mono-Regular.otf');
+}
+
+*{
+    box-sizing: border-box;
+}
+
+html {
+    background-image: url('./assets/bg.jpg');
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    margin: 0;
+    padding: 0;
+    color: black;
+    font-family:  San Francisco, 'San Francisco', Helvetica, Arial, sans-serif;
+    grid-template: minmax(20px, 2vh) 98vh / 100vw;
+    grid-template-areas:
+    "header"
+    "content"
+}
+
+.clock {
+    font-family: ui-monospace, 
+    Menlo, Monaco, 
+    "Cascadia Mono", "Segoe UI Mono", 
+    "Roboto Mono", 
+    "Oxygen Mono", 
+    "Ubuntu Mono", 
+    "Source Code Pro",
+    "Fira Mono", 
+    "Droid Sans Mono", 
+    "Consolas", "Courier New", monospace;
+    font-size: small;
+    font-weight: 400;
+}
+
+
+
+header {
+    display: grid;
+    padding-left: 3px;
+    align-items: center;
+    grid-template: minmax(20px, 2vh) / 2vw minmax(75px, 1.5fr) 100px 100px 100px 10fr 200px;
+    column-gap: 5px;
+    grid-area: header;
+    background-color: #ffffff88;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    box-shadow: 3px 0px 10px black;
+    justify-items: start;
+}
+
+.windowPane{
+    display: grid;
+    grid-template-rows: minmax(20px, 2vh) 1fr;
+    background-color: #ffffff99;
+    border-radius: 4px;
+    box-shadow: 1px 1px 10px black;
+    height: 300px;
+    width: 600px;
+    position: absolute;
+    z-index: 9999;
+    left: 35%;
+    top: 30%;
+    /* transform: translate(-50%, -50%); */
+}
+
+.windowTop{
+    display: grid;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #eeeeeebb;
+}
+
+.windowBottom{
+    display: grid;
+}
+
+.headerbar{
+    width: 100%;
+}
+
+.headerbar:hover{
+    background-color: #ffffff99;
+}
+
+.headericon {
+    height: 80%;
+}
+
+
+content{
+    grid-area: content;
+    user-select: none;
+    display: grid;
+    position: relative;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    grid-auto-rows: max-content;
+}
+
+.draggable {
+    width: 50px;
+    height: 50px;
+    /* position: absolute; */
+    cursor: grab;
+    user-select: text;
+}
