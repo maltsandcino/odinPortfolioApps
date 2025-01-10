@@ -203,7 +203,22 @@ function makeWindow(id){
             })
         }
         else {
-            button.addEventListener('click', () => pane.classList.toggle("windowPaneMaximized"))
+            button.addEventListener('click', () => {
+                if (!pane.classList.contains('windowPaneMaximized')){
+                    pane.dataset.left = pane.style.left;
+                    pane.dataset.top = pane.style.top;
+                    pane.style.left = "0px";
+                    pane.style.top = "0px"
+                    pane.classList.add("windowPaneMaximized")
+                }
+                else {
+                    pane.style.left = pane.dataset.left;
+                    pane.style.top = pane.dataset.top;
+                    pane.classList.remove("windowPaneMaximized")
+                    }
+            }
+            
+            )
 
         }
     })
