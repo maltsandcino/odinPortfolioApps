@@ -4,12 +4,13 @@ import Project from './project.js';
 import ProjectManager from './projectManager.js'
 import objectToClass from './jsonToObject.js'
 import enableDrag from './drag.js'
-import dragPane from './dragPane.js'
+import makeWindow from './makeWindow.js'
 import './styles.css'
 
 //Create project manager. This checks for existing program managers. IT also parses them if they exist.
 var projectManager = new ProjectManager;
 objectToClass(projectManager);
+
 //Enable dragging. This has to get fixed a bit, it doesn't look the greatest but works well.
 enableDrag();
 
@@ -169,61 +170,61 @@ localStorage.setItem('variable', example)
 var icon1 = document.getElementById("todoapp");
 icon1.addEventListener('dblclick', () => makeWindow(icon1.id));
 
-function makeWindow(id){
-    console.log(id)
-    let pane = document.createElement("div")
-    let contentPane = document.getElementById("contentHolder");
-    pane.classList.add("windowPane")
-    pane.id="windowPane"
-    pane.draggable="false"
-    pane.innerHTML = `  <div class="windowTop" id="windowTop">
-                            <div class="buttonRed paneButton"></div>
-                            <div class="buttonYellow paneButton"></div>
-                            <div class="buttonGreen paneButton"></div>
-                            == ${id} ==
-                        </div>
-                        <div class="windowBottom">
-                            Window content for the ${id} app.
-                        </div>`
+// function makeWindow(id){
+//     console.log(id)
+//     let pane = document.createElement("div")
+//     let contentPane = document.getElementById("contentHolder");
+//     pane.classList.add("windowPane")
+//     pane.id="windowPane"
+//     pane.draggable="false"
+//     pane.innerHTML = `  <div class="windowTop" id="windowTop">
+//                             <div class="buttonRed paneButton"></div>
+//                             <div class="buttonYellow paneButton"></div>
+//                             <div class="buttonGreen paneButton"></div>
+//                             == ${id} ==
+//                         </div>
+//                         <div class="windowBottom">
+//                             Window content for the ${id} app.
+//                         </div>`
         
-    contentPane.appendChild(pane);
+//     contentPane.appendChild(pane);
 
-    document.getElementById("windowTop").addEventListener('mousedown', dragPane);
-    let buttons = document.querySelectorAll(".paneButton");
+//     document.getElementById("windowTop").addEventListener('mousedown', dragPane);
+//     let buttons = document.querySelectorAll(".paneButton");
 
-    buttons.forEach(button => {
-        if (button.classList.contains("buttonRed")){
-            button.addEventListener('click', () => {
-                contentPane.removeChild(pane);
-        })};
+//     buttons.forEach(button => {
+//         if (button.classList.contains("buttonRed")){
+//             button.addEventListener('click', () => {
+//                 contentPane.removeChild(pane);
+//         })};
 
-        if(button.classList.contains("buttonYellow")){
-            button.addEventListener('click', () => {
-                console.log("This doesn't do anything yet.")
-            })
-        }
-        else {
-            button.addEventListener('click', () => {
-                if (!pane.classList.contains('windowPaneMaximized')){
-                    pane.dataset.left = pane.style.left;
-                    pane.dataset.top = pane.style.top;
-                    pane.style.left = "0px";
-                    pane.style.top = "0px"
-                    pane.classList.add("windowPaneMaximized")
-                }
-                else {
-                    pane.style.left = pane.dataset.left;
-                    pane.style.top = pane.dataset.top;
-                    pane.classList.remove("windowPaneMaximized")
-                    }
-            }
+//         if(button.classList.contains("buttonYellow")){
+//             button.addEventListener('click', () => {
+//                 console.log("This doesn't do anything yet.")
+//             })
+//         }
+//         else {
+//             button.addEventListener('click', () => {
+//                 if (!pane.classList.contains('windowPaneMaximized')){
+//                     pane.dataset.left = pane.style.left;
+//                     pane.dataset.top = pane.style.top;
+//                     pane.style.left = "0px";
+//                     pane.style.top = "0px"
+//                     pane.classList.add("windowPaneMaximized")
+//                 }
+//                 else {
+//                     pane.style.left = pane.dataset.left;
+//                     pane.style.top = pane.dataset.top;
+//                     pane.classList.remove("windowPaneMaximized")
+//                     }
+//             }
             
-            )
+//             )
 
-        }
-    })
+//         }
+//     })
     
-}
+// }
 
 // if (localStorage.getItem('variable')){
 //     console.log(JSON.parse(localStorage.getItem('variable')));
