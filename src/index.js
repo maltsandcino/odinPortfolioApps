@@ -166,23 +166,47 @@ let example = JSON.stringify(mj)
 localStorage.setItem('variable', example)
 
 //example making a icon openable
-var icon1 = document.getElementById("draggable1");
-icon1.addEventListener('dblclick', makeWindow);
+var icon1 = document.getElementById("todoapp");
+icon1.addEventListener('dblclick', () => makeWindow(icon1.id));
 
-function makeWindow(){
+function makeWindow(id){
+    console.log(id)
     let pane = document.createElement("div")
     let contentPane = document.getElementById("contentHolder");
     pane.classList.add("windowPane")
     pane.id="windowPane"
     pane.draggable="false"
     pane.innerHTML = `  <div class="windowTop" id="windowTop">
-                            Title of window, buttons, etc.
+                            <div class="buttonRed paneButton"></div>
+                            <div class="buttonYellow paneButton"></div>
+                            <div class="buttonGreen paneButton"></div>
+                            == ${id} ==
                         </div>
                         <div class="windowBottom">
-                            Window content
+                            Window content for the ${id} app.
                         </div>`
+        
     contentPane.appendChild(pane);
+
     document.getElementById("windowTop").addEventListener('mousedown', dragPane);
+    let buttons = document.querySelectorAll(".paneButton");
+
+    buttons.forEach(button => {
+        if (button.classList.contains("buttonRed")){
+            button.addEventListener('click', () => {
+                contentPane.removeChild(pane);
+        })};
+
+        if(button.classList.contains("buttonYellow")){
+            button.addEventListener('click', () => {
+                console.log("This doesn't do anything yet.")
+            })
+        }
+        else {
+            button.addEventListener('click', () => pane.classList.toggle("windowPaneMaximized"))
+
+        }
+    })
     
 }
 
