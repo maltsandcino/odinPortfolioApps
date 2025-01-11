@@ -1,3 +1,5 @@
+import makeWindow from './makeWindow.js';
+
 function enableDrag() {const draggables = document.querySelectorAll('.draggable');
 const container = document.getElementsByTagName("content")[0];
 
@@ -7,9 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setInitialPositions(); 
     makeAbsolute();})
 //Below finds the icons based on where they are in the grid layout. This is necessary to make it actually open properly.
+//add event listener to open icon
 
 function setInitialPositions(){
     draggables.forEach(draggable => {
+    draggable.addEventListener('dblclick', () => makeWindow(draggable.id))
     const rect = draggable.getBoundingClientRect();
     draggable.style.left = `${rect.left}px`;
     draggable.style.top = `${rect.top}px`;
