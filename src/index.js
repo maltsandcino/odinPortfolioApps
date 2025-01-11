@@ -4,12 +4,12 @@ import Project from './project.js';
 import ProjectManager from './projectManager.js'
 import objectToClass from './jsonToObject.js'
 import enableDrag from './drag.js'
-import dragPane from './dragPane.js'
+// import makeWindow from './makeWindow.js'
 import './styles.css'
 
 //Create project manager. This checks for existing program managers. IT also parses them if they exist.
-var projectManager = new ProjectManager;
-objectToClass(projectManager);
+
+
 //Enable dragging. This has to get fixed a bit, it doesn't look the greatest but works well.
 enableDrag();
 
@@ -50,7 +50,7 @@ setInterval(log_date, 1000)
 // projectManager = JSON.stringify(projectManager)
 // projectManager = JSON.parse(projectManager)
 // //At this point, we need to use our object parsers on each object in the projectManager to make sure our projects and tasks have the correct methods.
-console.log(projectManager)
+// console.log(projectManager)
 
 
 
@@ -62,81 +62,7 @@ console.log(projectManager)
 
 /* 
 
-A) Objects To Include:
-    1. Task Object
-    2. Project Object (Default Project Object should be created before needing to sign in)
-    3. A task ID object which tracks Tasks, and generates an ID
 
-Task object should contain the following information:
-Title       - String
-Description - String
-Due Date    - Date
-Priority    - Number
-Completed   - Boolean
-ID          - Number
-
-Project object should contain: 
-
-Title       - String
-Description - String
-Completed Tasks - Number of Number
-a list of Task objects  - Set of IDs
-
-
-
-Project Manager Object should contain:
-
-Next_Task_ID - Number
-List of Tasks - HashTable
-List of Projects - Array
-
-B) Modules and Logic:
-
-    The logic and methods of each object should be contained in separate modules. These should
-    be imported into index.js, and the logic for these should be separate from DOM manipulation.
-
-    Task Object Methods:
-    Constructor(Title, Description, Due Date, Priority, ProjectManager)
-    ModifyTitle
-    ModifyDescription
-    ModifyDueDate
-    ModifyPriority
-    DeleteTask
-
-    Project Object Methods:
-    Constructor(Title, Description)
-    ModifyTitle
-    ModifyDescription
-    DeleteProject
-
-    Task ID Object Methods:
-    addProject()
-    Generate ID()
-
-    Non-Object-Functions and logic, to be done in main file:
-
-    1) JSON.stringify Project Objects + Task Objects on Creation of Each Task / Project / ID Generator
-    2) Save these to localStorage Variables
-    3) IIFE on DOMContentLoaded -> JSON.Parse these, tasks first, then objects, to add to DOM on start if not already existing.
-
-    4) SPA Functions to handle: Start Page, New Task Page, New Project Page, View Project Page, View Task Page
-        I may break these functions up into smaller DOM management objects.
-
-
-    ########Remember These Points while programming this #########
-        Always check localstorage BEFORE any content actually is loaded, localStorage.getItem('projectManager').
-        This will get me the data I need back from the local storage, but I will still have to convert this into a project manager type object. I can actually add a check for local storage
-        into the constructor of Project Manager, by calling load data from there..
-
-        Note: If I want to use the class methods for Task and Project, I will have to reconvert these to Tasks and Projects Here, to avoid making too many dependencies in a different file.
-
-        To create a new task, we must already have a project created.
-
-        We should then create a new Task object. Once this is created, we have to add it to the project. Theoretically, it could just exist and hangout in the projectManager hashmap,
-        but it will be difficult to access this particular task if we do it this way.
-
-        Every time we add a new task or project, projectManager needs to be readded to local storage (JSON.stringify()). This is because all projects are tracked in PM, and all tasks are hashed
-        here as well.
 
     
 
@@ -166,64 +92,64 @@ let example = JSON.stringify(mj)
 localStorage.setItem('variable', example)
 
 //example making a icon openable
-var icon1 = document.getElementById("todoapp");
-icon1.addEventListener('dblclick', () => makeWindow(icon1.id));
+// var icon1 = document.getElementById("todoapp");
+// icon1.addEventListener('dblclick', () => makeWindow(icon1.id));
 
-function makeWindow(id){
-    console.log(id)
-    let pane = document.createElement("div")
-    let contentPane = document.getElementById("contentHolder");
-    pane.classList.add("windowPane")
-    pane.id="windowPane"
-    pane.draggable="false"
-    pane.innerHTML = `  <div class="windowTop" id="windowTop">
-                            <div class="buttonRed paneButton"></div>
-                            <div class="buttonYellow paneButton"></div>
-                            <div class="buttonGreen paneButton"></div>
-                            == ${id} ==
-                        </div>
-                        <div class="windowBottom">
-                            Window content for the ${id} app.
-                        </div>`
+// function makeWindow(id){
+//     console.log(id)
+//     let pane = document.createElement("div")
+//     let contentPane = document.getElementById("contentHolder");
+//     pane.classList.add("windowPane")
+//     pane.id="windowPane"
+//     pane.draggable="false"
+//     pane.innerHTML = `  <div class="windowTop" id="windowTop">
+//                             <div class="buttonRed paneButton"></div>
+//                             <div class="buttonYellow paneButton"></div>
+//                             <div class="buttonGreen paneButton"></div>
+//                             == ${id} ==
+//                         </div>
+//                         <div class="windowBottom">
+//                             Window content for the ${id} app.
+//                         </div>`
         
-    contentPane.appendChild(pane);
+//     contentPane.appendChild(pane);
 
-    document.getElementById("windowTop").addEventListener('mousedown', dragPane);
-    let buttons = document.querySelectorAll(".paneButton");
+//     document.getElementById("windowTop").addEventListener('mousedown', dragPane);
+//     let buttons = document.querySelectorAll(".paneButton");
 
-    buttons.forEach(button => {
-        if (button.classList.contains("buttonRed")){
-            button.addEventListener('click', () => {
-                contentPane.removeChild(pane);
-        })};
+//     buttons.forEach(button => {
+//         if (button.classList.contains("buttonRed")){
+//             button.addEventListener('click', () => {
+//                 contentPane.removeChild(pane);
+//         })};
 
-        if(button.classList.contains("buttonYellow")){
-            button.addEventListener('click', () => {
-                console.log("This doesn't do anything yet.")
-            })
-        }
-        else {
-            button.addEventListener('click', () => {
-                if (!pane.classList.contains('windowPaneMaximized')){
-                    pane.dataset.left = pane.style.left;
-                    pane.dataset.top = pane.style.top;
-                    pane.style.left = "0px";
-                    pane.style.top = "0px"
-                    pane.classList.add("windowPaneMaximized")
-                }
-                else {
-                    pane.style.left = pane.dataset.left;
-                    pane.style.top = pane.dataset.top;
-                    pane.classList.remove("windowPaneMaximized")
-                    }
-            }
+//         if(button.classList.contains("buttonYellow")){
+//             button.addEventListener('click', () => {
+//                 console.log("This doesn't do anything yet.")
+//             })
+//         }
+//         else {
+//             button.addEventListener('click', () => {
+//                 if (!pane.classList.contains('windowPaneMaximized')){
+//                     pane.dataset.left = pane.style.left;
+//                     pane.dataset.top = pane.style.top;
+//                     pane.style.left = "0px";
+//                     pane.style.top = "0px"
+//                     pane.classList.add("windowPaneMaximized")
+//                 }
+//                 else {
+//                     pane.style.left = pane.dataset.left;
+//                     pane.style.top = pane.dataset.top;
+//                     pane.classList.remove("windowPaneMaximized")
+//                     }
+//             }
             
-            )
+//             )
 
-        }
-    })
+//         }
+//     })
     
-}
+// }
 
 // if (localStorage.getItem('variable')){
 //     console.log(JSON.parse(localStorage.getItem('variable')));

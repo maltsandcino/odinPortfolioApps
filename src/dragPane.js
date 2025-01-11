@@ -1,8 +1,17 @@
 function dragPane(event) {
-    const element = document.getElementById("windowPane");
+    const el = event.target;
+    let id = el.dataset.id
+    const element = document.getElementById(`windowPane${id}`);
+    console.log(event.target)
+    console.log(event.target.id)
+    if (event.target.classList.contains(`pB`)){
+        return 0
+    } 
+    console.log(element)
     const container = document.getElementsByTagName("content")[0];
     let offsetX, offsetY;
 
+    console.log("Break1")
     offsetX = event.clientX - element.getBoundingClientRect().left;
     offsetY = event.clientY - element.getBoundingClientRect().top;
     element.style.cursor = 'grabbing';
@@ -11,6 +20,7 @@ function dragPane(event) {
     document.addEventListener('mouseup', onMouseUp);
 
     function onMouseMove(e) {
+        console.log("Break2")
         const containerRect = container.getBoundingClientRect();
 
         const newX = e.clientX - offsetX;
