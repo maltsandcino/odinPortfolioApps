@@ -3,15 +3,144 @@ import Task from './task.js';
 import Project from './project.js';
 import ProjectManager from './projectManager.js'
 import objectToClass from './jsonToObject.js'
+import todoicon from './assets/todo.svg'
+import projectIcon from './assets/project.png'
+import plus from './assets/plus.png'
 
+if(!projectManager){
 var projectManager = new ProjectManager;
-objectToClass(projectManager);
+objectToClass(projectManager);}
+
+console.log(projectManager);
 
 
+//Create Container and three main elements
+    var contentContainer = document.createElement("div");
+    contentContainer.classList.add("windowBottom", "toDoContainer")
 
-var contentContainer = document.createElement("div");
-contentContainer.classList.add("windowBottom", "toDoContainer")
-contentContainer.innerHTML = "check, todoapp"
+    var toDoTop = document.createElement("div");
+    toDoTop.classList.add("toDoTop");
+
+    var toDoNav = document.createElement("div");
+    toDoNav.classList.add("toDoNav");
+
+    var toDoContent = document.createElement("div");
+    toDoContent.classList.add("toDoContent");
+
+//Create App Picture, App Title Div, Urgent Tasks, Total Tasks 
+    var title = document.createElement("div")
+    title.classList.add("appTitle");
+    title.id = "toDoTitle";
+    title.innerHTML = "Projects"
+
+    var urgent = document.createElement("div");
+    urgent.classList.add("urgentTaskTitle");
+
+    var total = document.createElement("div");
+    total.classList.add("totalTaskTitle");
+
+    //Get Urgent and Total Tasks to complete:
+    var urgentTasks = 0;
+    var totalTasks = 0
+    // for (const key in projectManager.tasks){
+    //     console.log(projectManager.tasks[key])
+    // }
+
+    Object.values(projectManager.tasks).forEach(value => {
+        if (value.priority > 1){
+        urgentTasks++}
+        if (value.completed === false){
+            totalTasks++
+        }
+    })
+
+    total.innerHTML = `Tasks Remaining: ${totalTasks}`
+    urgent.innerHTML = `Urgent Tasks: <span class="urgent">${urgentTasks}</span>`
+
+    //img node
+    var toDoImg = document.createElement('img')
+    toDoImg.src = todoicon
+    toDoImg.classList.add("smallIcon")
+    toDoImg.classList.add("toDoAppTitleImg")
+
+//Appending elements to top of app bar
+    toDoTop.appendChild(toDoImg);
+    toDoTop.appendChild(title);
+    toDoTop.appendChild(urgent);
+    toDoTop.appendChild(total);
+
+//Create new Project icon and Current Projects icon for nav
+    var cholder = document.createElement("div");
+    cholder.classList.add("navIconContainerToDo");
+    cholder.addEventListener('click', loadProjects)
+    var nholder = document.createElement("div");
+    nholder.classList.add("navIconContainerToDo");
+    nholder.addEventListener('click', createNewProject)
+
+    var currentProjects = document.createElement("img");
+    currentProjects.src = projectIcon;
+    currentProjects.classList.add("todonavicon");
+
+    var cproj = document.createElement("div")
+    cproj.innerHTML = "Current Projects"
+
+    var newProject = document.createElement("img");
+    newProject.classList.add("todonavicon");
+    newProject.src = plus;
+
+    var nproj = document.createElement("div");
+    nproj.innerHTML = "New Project"
+
+    cholder.appendChild(currentProjects)
+    cholder.appendChild(cproj)
+
+    nholder.appendChild(newProject)
+    nholder.appendChild(nproj)
+
+//Append to Nav
+    toDoNav.append(cholder);
+    toDoNav.append(nholder);
+
+//Content to be generated in the content Pane will vary depending on the actual function being called.
+
+//Appending constituent elements
+contentContainer.appendChild(toDoTop);
+contentContainer.appendChild(toDoNav);
+contentContainer.appendChild(toDoContent);
+
+// function to load projects and populate content pane
+function loadProjects(){
+    toDoContent.innerHTML = "";
+
+    projectManager.projects.forEach(proj => {
+        const projectDiv = document.createElement("div");
+        projectDiv.classList.add("toDoProjectDiv");
+        
+        const projectImg = document.createElement("img");
+        projectImg.classList.add("icon")
+        projectImg.src = projectIcon;
+
+        const projectName = document.createElement("span");
+        if(!proj.title == ""){
+        projectName.innerHTML = proj.title;}
+        else{
+            projectName.innerHTML = "Untitled Project"
+        }
+        
+
+        projectDiv.append(projectImg);
+        projectDiv.append(projectName);
+
+        //We need an event listener to load the particular project.
+        toDoContent.append(projectDiv);
+
+        })
+    
+}
+
+function createNewProject(){
+    console.log("create New Project")
+}
 
 export default contentContainer;
 
