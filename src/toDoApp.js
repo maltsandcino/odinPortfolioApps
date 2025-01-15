@@ -1,4 +1,4 @@
-import { format, add } from 'date-fns';
+import { format, add, formatDistance } from 'date-fns';
 import Task from './task.js';
 import Project from './project.js';
 import ProjectManager from './projectManager.js'
@@ -6,6 +6,7 @@ import objectToClass from './jsonToObject.js'
 import todoicon from './assets/todo.svg'
 import projectIcon from './assets/project.png'
 import plus from './assets/plus.png'
+import todoproject from './assets/todoproj.svg'
 
 if(!projectManager){
 var projectManager = new ProjectManager;
@@ -34,9 +35,11 @@ console.log(projectManager);
     title.innerHTML = "Projects"
 
     var urgent = document.createElement("div");
+    urgent.id = "toDoUrgentCount"
     urgent.classList.add("urgentTaskTitle");
 
     var total = document.createElement("div");
+    total.id = "toDoTotalCount"
     total.classList.add("totalTaskTitle");
 
     //Get Urgent and Total Tasks to complete:
@@ -47,15 +50,15 @@ console.log(projectManager);
     // }
 
     Object.values(projectManager.tasks).forEach(value => {
-        if (value.priority > 1){
+        if (value.priority > 1 && !value.completed){
         urgentTasks++}
         if (value.completed === false){
             totalTasks++
         }
     })
 
-    total.innerHTML = `Tasks Remaining: ${totalTasks}`
-    urgent.innerHTML = `Urgent Tasks: <span class="urgent">${urgentTasks}</span>`
+    total.innerHTML = `Tasks Remaining: <span id="toDoToT">${totalTasks}</span>`
+    urgent.innerHTML = `Urgent Tasks: <span class="urgent" id="urg">${urgentTasks}</span>`
 
     //img node
     var toDoImg = document.createElement('img')
@@ -110,15 +113,21 @@ contentContainer.appendChild(toDoContent);
 
 // function to load projects and populate content pane
 function loadProjects(){
+    toDoContent.classList.remove("listTasks")
+    toDoContent.classList.remove("singleTask")
     toDoContent.innerHTML = "";
 
     projectManager.projects.forEach(proj => {
         const projectDiv = document.createElement("div");
+        projectDiv.addEventListener("click", () => accessTasks(proj));
+            
+        
         projectDiv.classList.add("toDoProjectDiv");
         
-        const projectImg = document.createElement("img");
-        projectImg.classList.add("icon")
-        projectImg.src = projectIcon;
+        var projectImg = document.createElement("img");
+        projectImg.classList.add("toDoIcon")
+        
+        projectImg.src = todoproject;
 
         const projectName = document.createElement("span");
         if(!proj.title == ""){
@@ -138,6 +147,168 @@ function loadProjects(){
     
 }
 
+
+function accessTasks(project){
+    toDoContent.innerHTML = "";
+    toDoContent.classList.add("listTasks");
+    toDoContent.classList.remove("singleTask")
+    let projTitle = document.createElement("h2");
+    let taskListContainer = document.createElement("div");
+    let infoBar = document.createElement("div");
+
+    projTitle.classList.add("toDoProjectTitle");
+    taskListContainer.classList.add("toDoLeftSide");
+    infoBar.classList.add("toDoRightSide");
+
+    projTitle.innerHTML = project.title;
+    let taskList = document.createElement("ul");
+    taskList.classList.add("toDoUL")
+    let tasks = project.tasks;
+
+    ///Formatting tasks into a list
+    tasks.forEach(task => {
+        var accessed_task = projectManager.tasks[task];
+        console.group(accessed_task)
+
+        let current_row = document.createElement("li");
+        current_row.classList.add("toDoLI");
+        let taskName = document.createElement("span");
+        let daysLeft = formatDistance(accessed_task.date, new Date(), { addSuffix: true });
+        current_row.addEventListener("click", () => getTask(project, accessed_task))
+        taskName.innerHTML = accessed_task.title
+        
+        if (accessed_task.priority > 1){
+            taskName.classList.add("urgent")
+        }
+
+        current_row.append(taskName)
+        current_row.append(daysLeft)
+
+        taskList.append(current_row)
+    })
+
+    taskListContainer.append(taskList)
+    
+    infoBar.innerHTML = project.description;
+
+    toDoContent.append(projTitle);
+    toDoContent.append(taskListContainer);
+    toDoContent.append(infoBar);
+
+}
+
+function getTask(project, task){
+    toDoContent.innerHTML = "";
+    toDoContent.classList.add("singleTask");
+    toDoContent.classList.remove("listTasks");
+    let taskTitle = document.createElement("h2");
+    taskTitle.innerHTML = task.title;
+    taskTitle.id = "toDoTaskTitle"
+
+    let description = task.description;
+    let due_date = task.date;
+    let time_left = formatDistance(task.date, new Date(), { addSuffix: true });
+    console.log(time_left)
+    let projectName = project.title;
+    let priority;
+    if(task.priority > 1){
+        priority = "high";
+    }
+    else if(task.priority > 0){
+        priority = "medium";
+    }
+    else {
+        priority = "low"
+    }
+
+    let completed = task.completed
+    let att1 = document.createElement("span");
+    att1.innerHTML = description;
+    att1.id = 'toDoTaskDesc'
+
+    att1.classList.add("toDoTaskDescription");
+
+    let att2 = document.createElement("span");
+    att2.innerHTML = `Project:  ${projectName}`
+    att2.id = 'toDoTaskName'
+
+    let att3 = document.createElement("span");
+    att3.innerHTML = `Priority:     ${priority}`
+    att3.id = 'toDoTaskPrior'
+
+    let att4 = document.createElement("span");
+    att4.innerHTML = `Due Date:     ${due_date} <span class="grey">(${time_left})</span>`
+    att4.id = 'toDoTaskTime'
+
+    let att5 = document.createElement("span");
+    att5.innerHTML = `Completed:    ${completed}`
+    att5.addEventListener('click', () => completeTask(task, att5))
+    att5.id = 'toDoTaskComp'
+
+    let deleteDiv = document.createElement("div");
+    deleteDiv.innerHTML = "Delete Task"
+    deleteDiv.id = 'toDoDelTask'
+    deleteDiv.addEventListener('click', () => {
+        if(task.priority > 1){urgentTasks--}
+
+        project.removeTask(task, projectManager);
+        accessTasks(project)
+        
+        if(task.priority > 1 && task.completed){
+            urgval--;
+            urg.innerHTML = urgval}
+        if(task.priority > 1 && !task.completed){
+            urgval++;
+            urg.innerHTML =urgval}
+        if(task.completed){
+            totval--;
+            tot.innerHTML = totval;
+        }
+        else{
+            totval++;
+            tot.innerHTML = totval;
+        }
+    }
+    )
+    toDoContent.append(taskTitle);
+    toDoContent.append(att1);
+    toDoContent.append(att2);
+    toDoContent.append(att3);
+    toDoContent.append(att4);
+    toDoContent.append(att5);
+    toDoContent.append(deleteDiv);
+
+
+
+    //Description, Due Date, Time Left, Priority,
+}
+
+function completeTask(task, div){
+    var urg = document.getElementById("urg")
+    var urgval = parseInt(urg.innerHTML)
+    var tot = document.getElementById("toDoToT")
+    var totval = parseInt(tot.innerHTML)
+    console.log(task.priority)
+    task.changeStatus()
+    div.innerHTML = `Completed: ${task.completed}`
+    projectManager.saveData()
+    if(task.priority > 1 && task.completed){
+        urgval--;
+        urg.innerHTML = urgval}
+    if(task.priority > 1 && !task.completed){
+        urgval++;
+        urg.innerHTML =urgval}
+    if(task.completed){
+        totval--;
+        tot.innerHTML = totval;
+    }
+    else{
+        totval++;
+        tot.innerHTML = totval;
+    }
+    
+
+}
 function createNewProject(){
     console.log("create New Project")
 }
