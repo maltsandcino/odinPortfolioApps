@@ -164,6 +164,23 @@ function accessTasks(project){
     let taskList = document.createElement("ul");
     taskList.classList.add("toDoUL")
     let tasks = project.tasks;
+    // if (tasks.length == 0){
+    //     // toDoContent.classList.remove("listTasks")
+    //     toDoContent.classList.add("emptyProject")
+    //     let banner = document.createElement("p");
+    //     banner.classList.add("toDoWarning");
+    //     banner.innerHTML = "No tasks found in this project. Why not add some?"
+        
+    //     projTitle.innerHTML = "Project Title"
+        
+    //     let adder = document.createElement("img");
+    //     adder.src = plus;
+    //     adder.classList.add("smallIcon")
+    //     toDoContent.append(projTitle)
+    //     toDoContent.append(banner)
+        
+    //     return
+    // }
 
     ///Formatting tasks into a list
     tasks.forEach(task => {
@@ -251,24 +268,29 @@ function getTask(project, task){
     deleteDiv.addEventListener('click', () => {
         if(task.priority > 1){urgentTasks--}
 
-        project.removeTask(task, projectManager);
+        project.removeTask(task.id, projectManager);
+        var urg = document.getElementById("urg")
+        var urgval = parseInt(urg.innerHTML)
+        var tot = document.getElementById("toDoToT")
+        var totval = parseInt(tot.innerHTML)
         accessTasks(project)
         
         if(task.priority > 1 && task.completed){
-            urgval--;
-            urg.innerHTML = urgval}
+            // urgval++;
+            // urg.innerHTML = urgval
+            }
         if(task.priority > 1 && !task.completed){
-            urgval++;
+            urgval--;
             urg.innerHTML =urgval}
         if(task.completed){
+            // totval--;
+            // tot.innerHTML = totval;
+        }
+        else{
             totval--;
             tot.innerHTML = totval;
         }
-        else{
-            totval++;
-            tot.innerHTML = totval;
-        }
-    }
+          projectManager.saveData()}
     )
     toDoContent.append(taskTitle);
     toDoContent.append(att1);

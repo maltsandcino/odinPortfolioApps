@@ -24,6 +24,10 @@ class ProjectManager {
         this.loadData()     
     }
 
+    removeTask(taskID){
+        delete this.tasks[taskID];
+    }
+
     generate(){
         let val = this.nextID;
         this.nextID++;
