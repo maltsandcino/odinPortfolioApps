@@ -25,6 +25,7 @@ class ProjectManager {
     }
 
     removeTask(taskID){
+        console.log(taskID)
         delete this.tasks[taskID];
     }
 
@@ -64,6 +65,10 @@ class ProjectManager {
 
     deleteProject(project){
         let index = this.projects.indexOf(project)
+        for (let i = 0; i < project.tasks.length; i++){
+            console.log(i)
+            this.removeTask(project.tasks[i])
+        }
         this.projects.splice(index, 1)
     }
 

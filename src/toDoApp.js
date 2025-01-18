@@ -113,6 +113,7 @@ contentContainer.appendChild(toDoContent);
 
 // function to load projects and populate content pane
 function loadProjects(){
+    console.log(projectManager.tasks)
     toDoContent.classList.remove("listTasks")
     toDoContent.classList.remove("singleTask")
     toDoContent.classList.remove("toDoAddTask");
@@ -165,6 +166,7 @@ function accessTasks(project){
     let taskList = document.createElement("ul");
     taskList.classList.add("toDoUL")
     let tasks = project.tasks;
+    
     // if (tasks.length == 0){
     //     // toDoContent.classList.remove("listTasks")
     //     toDoContent.classList.add("emptyProject")
@@ -213,6 +215,15 @@ function accessTasks(project){
     desc.classList.add('projdesc')
     let totalTasks = document.createElement("p");
     let completedTasks = document.createElement("p");
+    let deleteProject = document.createElement("p");
+    deleteProject.id = 'deleteProject';
+    deleteProject.innerHTML = "Delete Project";
+    deleteProject.addEventListener('click', () => {
+        if(confirm("Do you really want to delete this project?")){
+        projectManager.deleteProject(project);
+        projectManager.saveData()
+        loadProjects();}
+    })
     let newt = document.createElement("img");
     newt.src = plus;
     // newt.classList.add("icon");
@@ -229,6 +240,7 @@ function accessTasks(project){
     infoBar.append(desc);
     infoBar.append(totalTasks);
     infoBar.append(completedTasks);
+    infoBar.append(deleteProject)
 
     let ptaskholder = document.createElement("div");
     ptaskholder.append(newt)
@@ -295,6 +307,7 @@ function getTask(project, task){
     deleteDiv.innerHTML = "Delete Task"
     deleteDiv.id = 'toDoDelTask'
     deleteDiv.addEventListener('click', () => {
+        if(confirm("Are you sure you want to delete that task?")){
         if(task.priority > 3){urgentTasks--}
 
         project.removeTask(task.id, projectManager);
@@ -319,7 +332,7 @@ function getTask(project, task){
             totval--;
             tot.innerHTML = totval;
         }
-          projectManager.saveData()}
+          projectManager.saveData()}}
     )
     toDoContent.append(taskTitle);
     toDoContent.append(att1);
@@ -362,12 +375,70 @@ function completeTask(task, div, project){
 
 }
 function createNewProject(){
-    console.log("create New Project")
+    toDoContent.innerHTML = "";
+    toDoContent.classList.remove("listTasks");
+    toDoContent.classList.remove("singleTask");
+    toDoContent.classList.remove("toDoAddTask");
+    
+    let addProjectTitle = document.createElement("h2");
+    addProjectTitle.innerHTML = "Add a New Project";
+
+    // this.title = title;
+    //     this.description = description;
+    //     this.tasks = [];
+    //     this.totalTasks = 0
+    //     this.completedTasks = 0
+
+    let addProjectForm = document.createElement("div")
+    addProjectForm.id = "addProjectForm"
+    addProjectForm.innerHTML = `<form id="projectForm">
+                            <label for"toDoName">Project Name:</label>
+                            <input type="text" id="toDoProjectName" name="toDoProjectName" required>
+
+
+                            <label for"toDoProjectDescription">Project Description:</label>
+                            <textarea id="toDoProjectDescription" name="toDoProjectDescription" required></textarea>
+
+                            <button type="submit" id="submitNewProject" class="toDoButton1">Submit</button><button type="reset" class="toDoButton2">Reset</button>
+                            </form>`
+    toDoContent.appendChild(addProjectTitle)
+    toDoContent.append(addProjectForm);
+
+    document.getElementById("submitNewProject").addEventListener('click', () => addNewProject(event))
+
+
+
+}
+
+function addNewProject(){
+
+    event.preventDefault()
+
+    let form = document.forms['projectForm']
+    let cleanedData = {}
+
+    for (let element of form.elements){
+        if (element.id && element.id != 'submitNewProject'){
+            cleanedData[element.id] = element.value
+            if (element.value === ''){
+                return
+            }
+        }
+    }
+   
+    console.log(cleanedData)
+    let name = cleanedData['toDoProjectName'];
+    
+    let tododescription = cleanedData['toDoProjectDescription']
+    const newProject = new Project({title: name, description: tododescription})
+    projectManager.addProject(newProject)
+    projectManager.saveData()
+    accessTasks(newProject)
+
 }
 
 function addNewTask(project){
-    console.group(project)
-    console.log("adding task to above")
+    
     toDoContent.innerHTML = "";
     toDoContent.classList.remove("listTasks");
     toDoContent.classList.remove("singleTask");
