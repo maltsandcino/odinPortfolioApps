@@ -28,6 +28,10 @@ function log_date(){
 setInterval(log_date, 1000)
 
 
+//Update Task Count
+
+
+
 // if (projectManager.projects){
 //     for (let key in projectManager.tasks) {
 //         if (projectManager.tasks.hasOwnProperty(key)) {

@@ -1,10 +1,14 @@
 import dragPane from './dragPane.js'
 import folderIcon from './assets/foldericon.png'
+import todoicon from './assets/todo.svg'
 import todoapp from './toDoApp.js'
 
 ///Functionality to add: resize pane, fix id tags
 const applicationTable = {}
 applicationTable["todoapp"] =  todoapp
+const icons = {}
+icons["todoapp"] = todoicon
+
 
 
 
@@ -62,7 +66,13 @@ function makeWindow(id){
                 let dock = document.getElementById("dock")
                 //We need logic to import the actual image here, but for now, we'll use the generic folder.
                 let icon = document.createElement('img')
-                icon.src=folderIcon
+                if(icons.hasOwnProperty(id)){
+                    icon.src = icons[id]
+                }
+                else{
+                    icon.src = folderIcon
+                }
+                
                 icon.title=id
                 icon.id=`dock+${id}`
                 icon.classList.add("dockIcon")

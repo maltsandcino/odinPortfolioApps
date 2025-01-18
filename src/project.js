@@ -62,9 +62,11 @@ class Project {
         if(index > -1){
             this.tasks.splice(index, 1)
             this.totalTasks--
+            
             if(projectManager.checkTaskStatus(removeTask)){
                 this.completedTasks--
             }
+            projectManager.removeTask(removeTask)
             //if the task was complete, we shold also lower the total number of completed tasks
         }
         else return "This task was not found in the project."

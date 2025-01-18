@@ -26,12 +26,21 @@
         bottom: 0px;
         left: 25%;
     }
+}
+
+@keyframes embiggen {
+    0%{transform: scale(1);}
+    100%{
+        transform: scale(1.1);
+    }
 
 }
 
 *{
     box-sizing: border-box;
 }
+
+
 
 html {
     background-image: url('./assets/bg.jpg');
@@ -90,12 +99,14 @@ header {
 
 .windowPane{
     display: grid;
+    
     grid-template-rows: minmax(20px, 2vh) 1fr;
     background-color: #ffffff99;
     border-radius: 4px;
     box-shadow: 1px 1px 10px black;
     height: 50%;
     width: 50%;
+    min-width: 450px;
     position: absolute;
     z-index: 9999;
     left: 25%;
@@ -175,14 +186,24 @@ content{
 }
 
 .draggable {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none; 
+    -webkit-user-select: none; /* Safari */ 
+    -moz-user-select: none; /* Firefox */ 
+    -ms-user-select: none; /* Internet Explorer/Edge */
     display: grid;
     justify-items: center;
     grid-template-rows: 50px 10px;
     width: 70px;
-    height: 60px;
+    height: 70px;
     /* position: absolute; */
     cursor: grab;
     user-select: text;
+}
+
+.draggable:active{
+    outline: 1px solid #ffffff11;
+    border-radius: 4px;
 }
 
 .icon {
@@ -202,10 +223,11 @@ content{
     background-color: #00000060;
     height: 20px;
     min-width: 50px;
+    margin-bottom: 2px;
 }
 
 .dock {
-    padding-top: 5px;
+    padding-top: 8px;
     box-shadow: 3px 0px 10px black;
     display: flex;
     flex-direction: row;
@@ -231,6 +253,19 @@ content{
     cursor: pointer;
 }
 
+.smallIcon {
+    width: 25px;
+    height: 25px;
+}
+
+img {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none; 
+    -webkit-user-select: none; /* Safari */ 
+    -moz-user-select: none; /* Firefox */ 
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
 .dock:hover {
     animation: dock 1s;
     animation-fill-mode: forwards;
@@ -249,8 +284,325 @@ content{
 .toDoContainer{
     width: 100%;
     height: 100%;
-    grid-template: minmax(60px, 10%) 1fr / minmax(200px, 20%) 1fr;
+    grid-template: minmax(30px, 2%) 1fr / minmax(150px, 25%) 1fr;
+    cursor: default;
     grid-template-areas:
     "toDoTop toDoTop"
-    "toDoNav toDoContent"
+    "toDoNav toDoContent";
+    overflow-y: auto;
+    
 }
+
+.toDoTop{
+    background-color: #ffffff;
+    z-index: 3;
+    position: sticky;
+    top: 0;
+    box-shadow: 0px 1px 6px black;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    grid-area: toDoTop;
+    display: grid;
+    align-items: center;
+    justify-items: start;
+    font-size: 90%;
+    grid-template: 1fr / 10% minmax(70px, 15%) minmax(70px, 15%) minmax(100px, 30%) 30%;
+    grid-template-areas:
+    "todoimg todotitle . todourgent todototal"
+}
+
+.todonavicon {
+
+    max-width: 50%;
+    height: auto;
+}
+
+.todonavicon:hover {
+    animation: embiggen 1s;
+    animation-fill-mode: forwards;
+    max-width: 50%;
+    height: auto;
+}
+
+.navIconContainerToDo {
+    display: grid;
+    grid-template-rows: 4fr 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+
+.toDoTitle{
+    grid-area: todotitle;
+}
+.urgentTaskTitle{
+    grid-area: todourgent;
+    justify-self: end;
+}
+.totalTaskTitle{
+    grid-area: todototal;
+    justify-self: center;
+}
+.toDoAppTitleImg{
+    grid-area: todoimg;
+}
+.toDoNav{
+    display: grid;
+    background-color: #ffffffaa;
+    border-right: 1px dashed #000000;
+    grid-area: toDoNav;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    border-bottom-left-radius: 4px;
+    }
+.toDoContent{
+    background-color: #ffffffaa;
+    grid-area: toDoContent;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    border-bottom-right-radius: 4px;
+    
+}
+
+.urgent{
+    color: red;
+    font-weight: bold;
+}
+
+.toDoProjectDiv {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.toDoIcon {
+    z-index: 2;
+    width: 50px;
+    height: 50px;
+}
+
+.toDoIcon:hover {
+    animation: embiggen 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.listTasks{
+    display: grid;
+    grid-template: 1fr 4fr / 1fr 1fr;
+    grid-template-areas:
+    "toDoProjectTitle toDoProjectTitle"
+    "toDoProjectLeft toDoProjectRight";
+    
+    
+    
+}
+
+.toDoProjectTitle {
+    grid-area: toDoProjectTitle;
+    justify-self: center;
+}
+.toDoLeftSide {
+    grid-area: toDoProjectLeft;
+}
+.toDoRightSide{
+    grid-area: toDoProjectRight
+}
+
+.singleTask{
+    display: grid;
+    grid-template: 1fr 1fr 1fr 1fr 1fr / 1fr 1fr;
+    grid-template-areas:    "taskTitle taskTitle"
+                            "taskDescription taskDescription"
+                            "projectName projectPriority"
+                            "taskTime taskComplete"
+                            "taskDelete taskDelete"
+}
+
+#toDoTaskTitle{
+    grid-area: taskTitle;
+    background-image: linear-gradient(to right, rgba(175, 170, 170, .2), transparent);
+    align-self: center;
+
+}
+
+#toDoTaskDesc{
+    grid-area: taskDescription;
+    border-bottom: 1px dashed black;
+    overflow: hidden;
+    margin-bottom: 5px;
+
+}
+
+#toDoTaskName{
+    grid-area: projectName;
+
+}
+
+#toDoTaskPrior{
+    grid-area: projectPriority;
+
+}
+
+#toDoTaskTime{
+    grid-area: taskTime;
+
+}
+    
+#toDoTaskComp{
+    grid-area: taskComplete;
+
+}
+
+#toDoDelTask{
+    grid-area: taskDelete;
+
+}
+
+.toDoLI{
+    padding-top: 0px;
+    padding-left: 4px;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.toDoLI:nth-child(odd){
+    background-image: linear-gradient(to right, rgba(175, 170, 170, .2), transparent);
+}
+.toDoLI:nth-child(even){
+    background-image: linear-gradient(to left, rgba(175, 170, 170, .2), transparent);
+}
+
+.toDoUL{
+    padding-left: 0;
+}
+
+.emptyProject{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;;
+    justify-items: center;
+}
+
+
+
+.toDoRightSide{   
+    padding-left: 2px;
+    padding-right: 4px;
+    display: grid;
+    grid-template-rows: 60px 30px 30px 30px 1fr;
+}
+
+.ptaskholder{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+
+
+.gridcenter{
+    height: 100px;
+    align-self: center;
+    justify-self: center;
+}
+
+.gridcenter:hover {
+    animation: embiggen 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.toDoNewTask{
+    align-self: baseline;
+    justify-self: center;
+} 
+
+
+
+.projdesc{
+    
+        width: 100%;
+        
+        height: 60px;
+        overflow: hidden;
+        text-align: justify;
+        
+    }
+
+#addTaskForm{
+    display: flex;
+    width: 100%;
+    
+    flex-direction: row;
+    justify-content: center;
+    justify-items: center;
+}
+
+#taskForm{
+    
+    width: 80%;
+    display: grid;
+    row-gap: 20px;
+    column-gap: 5px;
+    grid-template: 1fr 1fr 1fr 2fr 1fr / 1fr 1fr;
+}
+
+.toDoAddTask{
+    display: grid;
+    grid-template-rows: 1fr 4fr .5fr;
+}
+
+.toDoButton1, .toDoButton2 {
+    font-family: 'San Francisco';
+    color: black;
+    font-size: large;
+    width: 60%;
+    border-radius: 5px;
+    outline: none;
+    background-color: #aaaaaabb;
+    border: 0;
+    z-index: 99;
+}
+
+.toDoButton1:hover, .toDoButton2:hover {
+    background-color: #999999bb;
+    cursor: pointer; 
+}
+
+.toDoButton1{
+    justify-self: end;
+    margin-right: 10px
+}
+
+.toDoButton2{
+    margin-left: 10px;
+    justify-self: start;
+}
+
+#addProjectForm{
+    margin-top: -50px;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+
+#projectForm{
+    width: 80%;
+    display: grid;
+    row-gap: 20px;
+    column-gap: 5px;
+    grid-template: 1fr 3fr 1fr 1fr / 1fr 1fr;
+}
+
+
+/* projTitle.classList.add("toDoProjectTitle");
+    taskList.classList.add("toDoLeftSide");
+    infoBar.classList.add("toDoRightSide"); */

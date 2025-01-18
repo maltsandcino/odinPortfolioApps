@@ -24,6 +24,11 @@ class ProjectManager {
         this.loadData()     
     }
 
+    removeTask(taskID){
+        console.log(taskID)
+        delete this.tasks[taskID];
+    }
+
     generate(){
         let val = this.nextID;
         this.nextID++;
@@ -45,18 +50,25 @@ class ProjectManager {
 
     changeStatus(id, project){
         //requires id of task to do this, also requires the project.
+        console.log("changing status")
+        console.group(project)
         let task = this.tasks[id];
         task.changeStatus()
         if (task.completed === true){
-            project.completed++
+            project.completedTasks++
         }
         else{
-            project.completed--
+            project.completedTasks--
         }
+        console.group(project)
     }
 
     deleteProject(project){
         let index = this.projects.indexOf(project)
+        for (let i = 0; i < project.tasks.length; i++){
+            console.log(i)
+            this.removeTask(project.tasks[i])
+        }
         this.projects.splice(index, 1)
     }
 
