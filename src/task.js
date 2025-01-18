@@ -28,9 +28,11 @@ class Task {
             this.parseTask(jobject, projectManager)
         }
         else{
+            console.log(title)
+            console.log(description)
         this.title = title;
         this.description = description;
-        this.date = format(new Date(date), 'MMMM dd, yyyy');
+        this.date = format(date, 'MMMM dd, yyyy');
         this.priority = priority;
         this.completed = false;
         this.id = projectManager.generate();

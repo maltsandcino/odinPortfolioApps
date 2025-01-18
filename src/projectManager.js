@@ -49,14 +49,17 @@ class ProjectManager {
 
     changeStatus(id, project){
         //requires id of task to do this, also requires the project.
+        console.log("changing status")
+        console.group(project)
         let task = this.tasks[id];
         task.changeStatus()
         if (task.completed === true){
-            project.completed++
+            project.completedTasks++
         }
         else{
-            project.completed--
+            project.completedTasks--
         }
+        console.group(project)
     }
 
     deleteProject(project){

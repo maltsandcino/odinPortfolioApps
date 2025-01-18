@@ -1,4 +1,4 @@
-import { format, add, formatDistance } from 'date-fns';
+import { format, add, formatDistance, parseISO } from 'date-fns';
 import Task from './task.js';
 import Project from './project.js';
 import ProjectManager from './projectManager.js'
@@ -50,7 +50,7 @@ console.log(projectManager);
     // }
 
     Object.values(projectManager.tasks).forEach(value => {
-        if (value.priority > 1 && !value.completed){
+        if (value.priority > 3 && !value.completed){
         urgentTasks++}
         if (value.completed === false){
             totalTasks++
@@ -115,6 +115,7 @@ contentContainer.appendChild(toDoContent);
 function loadProjects(){
     toDoContent.classList.remove("listTasks")
     toDoContent.classList.remove("singleTask")
+    toDoContent.classList.remove("toDoAddTask");
     toDoContent.innerHTML = "";
 
     projectManager.projects.forEach(proj => {
@@ -194,7 +195,7 @@ function accessTasks(project){
         current_row.addEventListener("click", () => getTask(project, accessed_task))
         taskName.innerHTML = accessed_task.title
         
-        if (accessed_task.priority > 1){
+        if (accessed_task.priority > 3){
             taskName.classList.add("urgent")
         }
 
@@ -206,7 +207,35 @@ function accessTasks(project){
 
     taskListContainer.append(taskList)
     
-    infoBar.innerHTML = project.description;
+   
+
+    let desc = document.createElement("p");
+    desc.classList.add('projdesc')
+    let totalTasks = document.createElement("p");
+    let completedTasks = document.createElement("p");
+    let newt = document.createElement("img");
+    newt.src = plus;
+    // newt.classList.add("icon");
+    newt.classList.add("gridcenter")
+
+    desc.innerHTML = project.description
+    totalTasks.innerHTML = `Total Tasks: ${project.totalTasks}`
+    completedTasks.innerHTML = `Completed: ${project.completedTasks}`
+
+    let ptask = document.createElement("p");
+    ptask.innerHTML = "New Task";
+    ptask.classList.add("toDoNewTask");
+
+    infoBar.append(desc);
+    infoBar.append(totalTasks);
+    infoBar.append(completedTasks);
+
+    let ptaskholder = document.createElement("div");
+    ptaskholder.append(newt)
+    ptaskholder.append(ptask)
+    ptaskholder.addEventListener("click", () => addNewTask(project))
+    infoBar.append(ptaskholder)
+    ptaskholder.classList.add("ptaskholder")
 
     toDoContent.append(projTitle);
     toDoContent.append(taskListContainer);
@@ -228,10 +257,10 @@ function getTask(project, task){
     console.log(time_left)
     let projectName = project.title;
     let priority;
-    if(task.priority > 1){
+    if(task.priority > 3){
         priority = "high";
     }
-    else if(task.priority > 0){
+    else if(task.priority > 1){
         priority = "medium";
     }
     else {
@@ -259,14 +288,14 @@ function getTask(project, task){
 
     let att5 = document.createElement("span");
     att5.innerHTML = `Completed:    ${completed}`
-    att5.addEventListener('click', () => completeTask(task, att5))
+    att5.addEventListener('click', () => completeTask(task, att5, project))
     att5.id = 'toDoTaskComp'
 
     let deleteDiv = document.createElement("div");
     deleteDiv.innerHTML = "Delete Task"
     deleteDiv.id = 'toDoDelTask'
     deleteDiv.addEventListener('click', () => {
-        if(task.priority > 1){urgentTasks--}
+        if(task.priority > 3){urgentTasks--}
 
         project.removeTask(task.id, projectManager);
         var urg = document.getElementById("urg")
@@ -275,11 +304,11 @@ function getTask(project, task){
         var totval = parseInt(tot.innerHTML)
         accessTasks(project)
         
-        if(task.priority > 1 && task.completed){
+        if(task.priority > 3 && task.completed){
             // urgval++;
             // urg.innerHTML = urgval
             }
-        if(task.priority > 1 && !task.completed){
+        if(task.priority > 3 && !task.completed){
             urgval--;
             urg.innerHTML =urgval}
         if(task.completed){
@@ -305,19 +334,20 @@ function getTask(project, task){
     //Description, Due Date, Time Left, Priority,
 }
 
-function completeTask(task, div){
+function completeTask(task, div, project){
     var urg = document.getElementById("urg")
     var urgval = parseInt(urg.innerHTML)
     var tot = document.getElementById("toDoToT")
     var totval = parseInt(tot.innerHTML)
     console.log(task.priority)
-    task.changeStatus()
+    ///Changed below from task.changeStatus()
+    projectManager.changeStatus(task.id, project);
     div.innerHTML = `Completed: ${task.completed}`
     projectManager.saveData()
-    if(task.priority > 1 && task.completed){
+    if(task.priority > 3 && task.completed){
         urgval--;
         urg.innerHTML = urgval}
-    if(task.priority > 1 && !task.completed){
+    if(task.priority > 3 && !task.completed){
         urgval++;
         urg.innerHTML =urgval}
     if(task.completed){
@@ -334,6 +364,95 @@ function completeTask(task, div){
 function createNewProject(){
     console.log("create New Project")
 }
+
+function addNewTask(project){
+    console.group(project)
+    console.log("adding task to above")
+    toDoContent.innerHTML = "";
+    toDoContent.classList.remove("listTasks");
+    toDoContent.classList.remove("singleTask");
+    toDoContent.classList.add("toDoAddTask");
+    let addTaskHeader = document.createElement("h3");
+    addTaskHeader.id = "addNewTask";
+    addTaskHeader.innerHTML = `Creating new task for: ${project.title}`;
+    let addTaskForm = document.createElement("div")
+    addTaskForm.id = "addTaskForm"
+    addTaskForm.innerHTML = `<form id="taskForm">
+                            <label for"toDoName">Task Name:</label>
+                            <input type="text" id="toDoName" name="toDoName" required>
+
+                            <label for"toDoDate">Due Date:</label>
+                            <input type="date" id="toDoDate" name="toDoDate" required>
+
+                            <label for"toDoPriority">Priority: <span class="grey">5 being highest</span></label>
+                            <input type="Number" id="toDoPriority" name="toDoPriority" max=5 min=1 required>
+
+                            <label for"toDoDescription">Task Description:</label>
+                            <textarea id="toDoDescription" name="toDoDescription" required></textarea>
+
+                            <button type="submit" id="submitNewTask" class="toDoButton1">Submit</button><button type="reset" class="toDoButton2">Reset</button>
+                            </form>`
+
+    toDoContent.append(addTaskHeader);
+    toDoContent.append(addTaskForm)
+
+    let submitButton = document.getElementById("submitNewTask");
+    submitButton.addEventListener('click', () => submitTask(project))
+
+
+    // Get the form element const form = document.forms['myForm']; // Get all form inputs const formData = new FormData
+}
+
+function submitTask(project){
+    event.preventDefault()
+
+    let form = document.forms['taskForm']
+    let cleanedData = {}
+
+    for (let element of form.elements){
+        if (element.id && element.id != 'submitNewTask'){
+            cleanedData[element.id] = element.value
+            if (element.value === ''){
+                return
+            }
+        }
+    }
+   
+    
+    let name = cleanedData['toDoName'];
+    let tododate = cleanedData['toDoDate'];
+    
+    let todopriority = cleanedData['toDoPriority']
+    let tododescription = cleanedData['toDoDescription']
+    const newTask = new Task({title: name, description: tododescription, date: tododate, priority: todopriority, projectManager: projectManager})
+    project.addTask(newTask.id)
+    projectManager.saveData()
+    toDoContent.classList.remove("toDoAddTask");
+    accessTasks(project)
+}
+
+function update_tasks(){
+    //Check to see if this element exists
+    if (document.getElementById("toDoUrgentCount")){
+        //if so, update it
+
+    var urgentTasks = 0;
+    var totalTasks = 0
+   
+    Object.values(projectManager.tasks).forEach(value => {
+        if (value.priority > 3 && !value.completed){
+        urgentTasks++}
+        if (value.completed === false){
+            totalTasks++
+        }
+    })
+
+    document.getElementById("toDoToT").innerHTML = totalTasks
+    document.getElementById("urg").innerHTML = urgentTasks
+    }
+}
+
+setInterval(update_tasks, 250);
 
 export default contentContainer;
 
