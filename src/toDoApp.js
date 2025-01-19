@@ -232,6 +232,7 @@ function accessTasks(project){
     desc.innerHTML = project.description
     totalTasks.innerHTML = `Total Tasks: ${project.totalTasks}`
     completedTasks.innerHTML = `Completed: ${project.completedTasks}`
+   
 
     let ptask = document.createElement("p");
     ptask.innerHTML = "New Task";
@@ -334,12 +335,18 @@ function getTask(project, task){
         }
           projectManager.saveData()}}
     )
+    let goBack = document.createElement("p")
+    goBack.innerHTML = "Return to Project"
+    goBack.addEventListener('click', () => accessTasks(project))
+    goBack.id = "goBackToDo"
+
     toDoContent.append(taskTitle);
     toDoContent.append(att1);
     toDoContent.append(att2);
     toDoContent.append(att3);
     toDoContent.append(att4);
     toDoContent.append(att5);
+    toDoContent.append(goBack)
     toDoContent.append(deleteDiv);
 
 
