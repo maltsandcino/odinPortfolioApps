@@ -20,6 +20,8 @@ const icons = {};
 icons["todoapp"] = todoicon;
 icons["weatherapp"] = weathericon;
 
+var window_counter = 999
+
 function makeWindow(id) {
   //Default Window Content
   let windowContent = document.createElement("div");
@@ -30,6 +32,16 @@ function makeWindow(id) {
   if (document.getElementById(`windowPane${id}`)) {
     document.getElementById(`windowPane${id}`).style.left = "25%";
     document.getElementById(`windowPane${id}`).style.top = "25%";
+    document.getElementById(`windowPane${id}`).classList.remove('windowPaneMaximized');
+    // If the window has been resized.
+    if (document.getElementById(`windowPane${id}`).dataset.width){
+      document.getElementById(`windowPane${id}`).style.width = document.getElementById(`windowPane${id}`).dataset.width;
+      document.getElementById(`windowPane${id}`).style.height = document.getElementById(`windowPane${id}`).dataset.height;
+      document.getElementById(`windowPane${id}`).style.right = document.getElementById(`windowPane${id}`).dataset.right;
+      document.getElementById(`windowPane${id}`).style.top = document.getElementById(`windowPane${id}`).dataset.top;
+      document.getElementById(`windowPane${id}`).style.width = document.getElementById(`windowPane${id}`).dataset.width;
+      
+    }
     //Below we remove the icon from the doc if it's in there, i.e. the window is minimized.
     document.getElementById(`windowPane${id}`).style.display = "grid";
     if (document.getElementById(`dock+${id}`)) {
@@ -50,6 +62,9 @@ function makeWindow(id) {
   let pane = document.createElement("div");
   let contentPane = document.getElementById("contentHolder");
   pane.classList.add("windowPane");
+  //Always make window on top of screen
+  pane.style.zIndex = window_counter
+  window_counter++
   pane.id = `windowPane${id}`;
   pane.draggable = "false";
   pane.innerHTML = `  <div class="windowTop" id="windowTop${id}" data-id="${id}">
@@ -67,12 +82,15 @@ function makeWindow(id) {
     initializeWeatherApp()
   }
 
-
-
   //Handling window movement and Buttons Actions
   document
     .getElementById(`windowTop${id}`)
     .addEventListener("mousedown", dragPane);
+  
+  document.getElementById(`windowTop${id}`).addEventListener("click", () => {
+    pane.style.zIndex = window_counter; 
+    window_counter++
+    })
   let buttons = document.querySelectorAll(`.paneButton${id}`);
   document.querySelector(`.resizeButton${id}`).addEventListener('mousedown', windowResize)
 
@@ -87,7 +105,6 @@ function makeWindow(id) {
     if (button.classList.contains("buttonYellow")) {
       button.addEventListener("click", () => {
         let dock = document.getElementById("dock");
-        //We need logic to import the actual image here, but for now, we'll use the generic folder.
         let icon = document.createElement("img");
         if (icons.hasOwnProperty(id)) {
           icon.src = icons[id];
