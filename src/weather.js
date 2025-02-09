@@ -87,7 +87,7 @@ async function fetchWeather(position){
     lat = position.coords.latitude;
     long = position.coords.longitude;
 
-    const forecast = await  fetch(`http://api.weatherapi.com/v1/current.json?key=549e0fbd3b5d4305be9180049250302&q=${lat},${long}`);
+    const forecast = await  fetch(`https://api.weatherapi.com/v1/current.json?key=549e0fbd3b5d4305be9180049250302&q=${lat},${long}`);
     if (!forecast.ok){
         return
     }
