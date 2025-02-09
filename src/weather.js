@@ -124,7 +124,7 @@ async function citySearch(){
         if (document.getElementById("WeatherSearchBox").value == ""){
             return
         }
-        const forecast = await  fetch(`http://api.weatherapi.com/v1/current.json?key=549e0fbd3b5d4305be9180049250302&q=${document.getElementById("WeatherSearchBox").value}`);
+        const forecast = await  fetch(`https://api.weatherapi.com/v1/current.json?key=549e0fbd3b5d4305be9180049250302&q=${document.getElementById("WeatherSearchBox").value}`);
         if (!forecast.ok){
             alert("No location could be found matching that query.")
             document.getElementById("WeatherSearchBox").value = ""
