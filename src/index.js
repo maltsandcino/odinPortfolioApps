@@ -25,3 +25,16 @@ function log_date() {
 }
 
 setInterval(log_date, 1000);
+
+let menuButtons = document.querySelectorAll(".headerbar");
+
+menuButtons.forEach(button => {
+     button.addEventListener('mouseover', () => {
+          let children = button.childNodes
+          if (children.length === 2){children[1].style.display = "grid"}
+     })
+     button.addEventListener('mouseout', () => {
+          let children = button.childNodes
+          if (children.length === 2){children[1].style.display = "None"}
+     })
+})

@@ -3,11 +3,22 @@ import folderIcon from "./assets/foldericon.png";
 import todoicon from "./assets/todo.svg";
 import todoapp from "./toDoApp.js";
 
+import { weatherapp, initializeWeatherApp } from "./weather.js"
+import weathericon from "./assets/weather.svg"
+import resize from "./assets/resize.svg"
+import windowResize from "./windowResize.js"
+
+
+
 ///Functionality to add: resize pane, fix id tags
 const applicationTable = {};
+// Table controls the app loading logic
 applicationTable["todoapp"] = todoapp;
+applicationTable["weatherapp"] = weatherapp;
 const icons = {};
+// Icons
 icons["todoapp"] = todoicon;
+icons["weatherapp"] = weathericon;
 
 function makeWindow(id) {
   //Default Window Content
@@ -30,7 +41,10 @@ function makeWindow(id) {
   }
   //Generating the content of the window if the app exists in the Hashtable
   if (applicationTable.hasOwnProperty(id)) {
+
     windowContent = applicationTable[id];
+  
+  
   }
   //Creating the Window
   let pane = document.createElement("div");
@@ -43,17 +57,25 @@ function makeWindow(id) {
                             <div class="buttonYellow pB paneButton${id}"></div>
                             <div class="buttonGreen pB paneButton${id}"></div>
                             == ${id} ==
+                            <img src="${resize}" class="resizeButton pb resizeButton${id}" data-window="windowPane${id}">
                         </div>
                  `;
   //Appending the window content and the window
   pane.appendChild(windowContent);
   contentPane.appendChild(pane);
+  if (document.getElementById("windowPaneweatherapp")){
+    initializeWeatherApp()
+  }
+
+
 
   //Handling window movement and Buttons Actions
   document
     .getElementById(`windowTop${id}`)
     .addEventListener("mousedown", dragPane);
   let buttons = document.querySelectorAll(`.paneButton${id}`);
+  document.querySelector(`.resizeButton${id}`).addEventListener('mousedown', windowResize)
+
 
   buttons.forEach((button) => {
     if (button.classList.contains("buttonRed")) {
@@ -88,10 +110,18 @@ function makeWindow(id) {
         if (!pane.classList.contains("windowPaneMaximized")) {
           pane.dataset.left = pane.style.left;
           pane.dataset.top = pane.style.top;
+          if(pane.dataset.width){
+            pane.style.width = `100%`;
+            pane.style.height = `100%`;
+          }
           pane.style.left = "0px";
           pane.style.top = "0px";
           pane.classList.add("windowPaneMaximized");
         } else {
+          if(pane.dataset.width){
+            pane.style.width = pane.dataset.width;
+            pane.style.height = pane.dataset.height;
+          }
           pane.style.left = pane.dataset.left;
           pane.style.top = pane.dataset.top;
           pane.classList.remove("windowPaneMaximized");

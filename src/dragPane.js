@@ -1,4 +1,5 @@
 function dragPane(event) {
+  if (event.target.classList.contains('resizeButton')) return;
   const el = event.target;
   let id = el.dataset.id;
   const element = document.getElementById(`windowPane${id}`);
