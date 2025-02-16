@@ -5,6 +5,7 @@ weatherTitle.innerHTML = "Current Weather";
 weatherTitle.classList.add("weatherTitle");
 
 
+
 // Currently holding all the weather information
 
 weatherapp.appendChild(weatherTitle)
@@ -104,6 +105,18 @@ function displayAll(data){
     current_temp_data.innerHTML = `${data.current.temp_c}`
     text.innerHTML = `Conditions:`
     text_data.innerHTML = `${data.current.condition.text}`
+    let conditions = data.current.condition.text
+    if (conditions.includes('rain')){
+        weatherapp.classList.add('rainbg')
+        weatherapp.classList.remove('snowbg')
+    }
+    else if (conditions.includes('snow')){
+        weatherapp.classList.add('snowbg')
+        weatherapp.classList.remove('rainbg')
+    }
+    else {
+        weatherapp.classList = 'weatherContainer'
+    }
     last_updated.innerHTML = `Local Time:`
     last_updated_data.innerHTML = `${data.location.localtime}`
     icon.src = `${data.current.condition.icon}`

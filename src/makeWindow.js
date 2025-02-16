@@ -8,6 +8,9 @@ import weathericon from "./assets/weather.svg"
 import resize from "./assets/resize.svg"
 import windowResize from "./windowResize.js"
 
+import browser from './browser.js'
+import browsericon from './assets/webbrowser.svg'
+
 
 
 ///Functionality to add: resize pane, fix id tags
@@ -15,10 +18,12 @@ const applicationTable = {};
 // Table controls the app loading logic
 applicationTable["todoapp"] = todoapp;
 applicationTable["weatherapp"] = weatherapp;
+applicationTable["browserapp"] = browser;
 const icons = {};
 // Icons
 icons["todoapp"] = todoicon;
 icons["weatherapp"] = weathericon;
+icons["browserapp"] = browsericon;
 
 var window_counter = 999
 
