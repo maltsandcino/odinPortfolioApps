@@ -3,17 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "dev": "webpack serve",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy": "git subtree push --prefix dist origin gh-pages",
+    "start": "node src/server.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
     "@eslint/js": "^9.18.0",
+    "babel-loader": "^9.2.1",
     "css-loader": "^7.1.2",
     "eslint": "^9.18.0",
     "file-loader": "^6.2.0",
@@ -27,6 +32,8 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "dompurify": "^3.2.4",
+    "node-fetch": "^3.3.2"
   }
 }
