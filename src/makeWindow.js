@@ -11,6 +11,8 @@ import windowResize from "./windowResize.js"
 import browser from './browser.js'
 import browsericon from './assets/webbrowser.svg'
 
+import files from './files.js'
+
 
 
 ///Functionality to add: resize pane, fix id tags
@@ -19,11 +21,13 @@ const applicationTable = {};
 applicationTable["todoapp"] = todoapp;
 applicationTable["weatherapp"] = weatherapp;
 applicationTable["browserapp"] = browser;
+applicationTable["files"] = files;
 const icons = {};
 // Icons
 icons["todoapp"] = todoicon;
 icons["weatherapp"] = weathericon;
 icons["browserapp"] = browsericon;
+icons["files"] = folderIcon;
 
 var window_counter = 999
 

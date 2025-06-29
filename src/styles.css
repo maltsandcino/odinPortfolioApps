@@ -266,8 +266,11 @@ content{
 }
 
 .iconText {
-    display: grid;
-    align-items: center;
+    display: block;
+    margin: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
     font-size: 15px;
     border-radius: 4px;
     z-index: -1;
@@ -275,7 +278,11 @@ content{
     color: #c2bfbf;
     background-color: #00000060;
     height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     min-width: 50px;
+    max-width: 100%;
     margin-bottom: 2px;
 }
 
@@ -811,3 +818,70 @@ border-bottom-right-radius: 4px;
     grid-area: browserContent;
 }
 
+.filesIcon {
+    width: 20px;
+    align-self: center;
+}
+
+.filesLineName {
+    align-self: left;
+}
+
+.filesLineOpen {
+    align-self: center;
+}
+
+
+.filesHeader{
+    display: grid;
+    grid-template: 1fr / 1fr 6fr 1fr;
+    height: 20px;
+    background-color: #ffffffaa;
+}
+
+.filesLine {
+    display: grid;
+    grid-template: 1fr / 1fr 6fr 1fr;
+    height: 20px;
+    background-color: #ffffffaa;
+    cursor: pointer;
+}
+
+.filesLine:hover {
+    background-color: #d9d7d7aa;
+}
+
+.filesLine:nth-child(even) {
+    display: grid;
+    grid-template: 1fr / 1fr 6fr 1fr;
+    height: 20px;
+    background-color: #ebe6e6aa;
+}
+
+.filesLine:nth-child(even):hover {
+     background-color: #d9d7d7aa;}
+
+.closeFiles {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.5);
+    display: block;
+    height: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.closeFiles:hover {
+    background-color: #d9d7d7aa;
+}
+
+object {
+    flex: 1;
+    width: 100%
+}
+
+.resumeContainer {
+    background-color: #ffffff;
+}
+   

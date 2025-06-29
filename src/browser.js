@@ -30,7 +30,7 @@ async function search() {
     if (event.key === "Enter") {
         try {
             if (browserField.value.slice(0,7) != "http://"){
-                browserField.value = "http://" + browserField.value
+                browserField.value = "https://" + browserField.value
             }
             const proxyUrl = `/api/proxy?url=${encodeURIComponent(browserField.value)}`;
             const response = await fetch(proxyUrl);
